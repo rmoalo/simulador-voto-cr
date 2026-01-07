@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simulador de alineamiento de planes de gobierno</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Chart.js para el gráfico -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 1.5rem;
+      background: #f5f5f5;
+      color: #111;
+    }
+
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 1.5rem 2rem 2rem;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: #fafafa;
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      border: 1px solid #e1e1e1;
+    }
+
+    label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      padding: 0.4rem 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      font-size: 0.9rem;
+      box-sizing: border-box;
+    }
+
+    small.help {
+      display: block;
+      font-size: 0.75rem;
+      color: #666;
+      margin-top: 0.15rem;
+    }
+
+    .factor-desc {
+      display: none;
+      font-size: 0.75rem;
+      color: #555;
+      margin-top: 0.2rem;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 0.6rem 1.4rem;
+      border-radius: 999px;
+      border: none;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem;
+      background: #1a3cff;
+      color: #fff;
+      margin-right: 0.5rem;
+    }
+
+    .btn-secondary {
+      background: #e4e7ff;
+      color: #1a3cff;
+    }
+
+    .results {
+      margin-top: 2rem;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #e7edff;
+      color: #1a3cff;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      padding: 0.45rem 0.4rem;
+      border-bottom: 1px solid #eee;
+      text-align: right;
+    }
+
+    th:first-child, td:first-child {
+      text-align: left;
+    }
+
+    tr.highlight {
+      background: #f0f4ff;
+      font-weight: 600;
+    }
+
+    .axis-summary {
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      color: #555;
+    }
+
+    .alert {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: #a00;
+    }
+
+    .footer-note {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #666;
+      border-top: 1px solid #e1e1e1;
+      padding-top: 0.75rem;
+    }
+
+    .method-note {
+      margin-top: 1rem;
+      padding: 0.6rem 0.8rem;
+      border-left: 4px solid #1a3cff;
+      background: #f5f7ff;
+      font-size: 0.8rem;
+      color: #444;
+    }
+
+    .axis-def-toggle {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .axis-definitions {
+      margin-top: 0.75rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: 10px;
+      background: #fafafa;
+      border: 1px solid #e1e1e1;
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    .axis-definitions h4 {
+      margin: 0.3rem 0 0.1rem 0;
+      font-size: 0.9rem;
+    }
+
+    .axis-definitions p {
+      margin: 0 0 0.4rem 0;
+    }
+
+    .factor-toggle {
+      margin: 1rem 0 0.5rem 0;
+      font-size: 0.85rem;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 0.75rem;
+      }
+      .container {
+        padding: 1rem 1.1rem 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <h1>Simulador de alineamiento entre tus prioridades de voto y los planes de gobierno</h1>
+  <p style="font-size:0.9rem;max-width:760px;">
+Distribuye tus pesos personales entre los factores que influyen en tu decisión de voto. La aplicación agrupa automáticamente esos    factores en los ejes temáticos de los planes de gobierno y calcula qué candidatura se alinea más con tus prioridades usando la suma de diferencias absolutas (en puntos porcentuales) entre tu distribución y la de cada plan.
+  </p>
+
+  <h2>1. Ingresa el peso que le das a cada factor</h2>
+  <p style="font-size:0.85rem;">
+    Usa porcentajes que sumen 100 entre todos los factores. La aplicación normaliza internamente
+    para comparar tu distribución con la de cada plan.
+  </p>
+
+  <div class="factor-toggle">
+    <label>
+      <input type="checkbox" id="toggleFactorDesc">
+      Mostrar descripciones detalladas de los factores
+    </label>
+  </div>
+
+  <form id="weightsForm">
+    <div class="grid">
+      <!-- Reforma Institucional y Eficiencia Financiera -->
+      <div class="card">
+        <h3>Reforma Institucional y Eficiencia Financiera</h3>
+        <label for="corrupcion">Lucha contra corrupción y transparencia</label>
+        <input type="number" id="corrupcion" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="corrupcion">
+          Desconfianza hacia instituciones y políticos, donde la ciudadanía exige controles,
+          rendición de cuentas y ética pública más estricta.
+        </small>
+
+        <label for="estabilidad" style="margin-top:0.75rem;">Estabilidad fiscal y eficiencia del Estado</label>
+        <input type="number" id="estabilidad" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="estabilidad">
+          Preocupación por déficit fiscal, endeudamiento, carga tributaria y eficiencia del gasto público,
+          que condicionan la estabilidad económica y los servicios que recibe la población.
+        </small>
+      </div>
+
+      <!-- Seguridad y Justicia Integral -->
+      <div class="card">
+        <h3>Seguridad y Justicia Integral</h3>
+        <label for="seguridad">Seguridad ciudadana</label>
+        <input type="number" id="seguridad" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="seguridad">
+          Preocupación ligada al crimen organizado, homicidios, narcotráfico y percepción
+          de inseguridad en barrios y espacios públicos.
+        </small>
+      </div>
+
+      <!-- Gestión de Recursos Naturales -->
+      <div class="card">
+        <h3>Gestión de Recursos Naturales</h3>
+        <label for="ambiente">Ambiente y protección de recursos naturales</label>
+        <input type="number" id="ambiente" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="ambiente">
+          Preocupación por conservación ambiental, cambio climático, gestión de recursos hídricos
+          y protección de biodiversidad en todo el territorio.
+        </small>
+      </div>
+
+      <!-- Desarrollo Económico Integral -->
+      <div class="card">
+        <h3>Desarrollo Económico Integral</h3>
+        <label for="servicios">Servicios públicos y desarrollo local</label>
+        <input type="number" id="servicios" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="servicios">
+          Preocupación por la calidad y acceso a servicios básicos, infraestructura comunitaria
+          y oportunidades fuera del GAM.
+        </small>
+
+        <label for="costo" style="margin-top:0.75rem;">Costo de vida</label>
+        <input type="number" id="costo" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="costo">
+          Preocupación por la inflación en alimentos, tarifas, servicios y endeudamiento familiar
+          que afectan directamente el bienestar.
+        </small>
+
+        <label for="transporte" style="margin-top:0.75rem;">Transporte público y movilidad</label>
+        <input type="number" id="transporte" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="transporte">
+          Preocupación por congestión vial, altos costos, baja calidad del transporte público
+          y necesidad de sistemas más eficientes y seguros.
+        </small>
+
+        <label for="empleo" style="margin-top:0.75rem;">Empleo y crecimiento económico</label>
+        <input type="number" id="empleo" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="empleo">
+          Preocupación por desempleo estructural, informalidad, falta de oportunidades
+          y necesidad de dinamizar la inversión y el crecimiento.
+        </small>
+      </div>
+
+      <!-- Desarrollo Social Inclusivo -->
+      <div class="card">
+        <h3>Desarrollo Social Inclusivo</h3>
+        <label for="educacion">Educación pública</label>
+        <input type="number" id="educacion" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="educacion">
+          Preocupaciones por calidad educativa, brechas de aprendizaje, infraestructura deteriorada
+          y futuro laboral de jóvenes y niñas/os.
+        </small>
+
+        <label for="salud" style="margin-top:0.75rem;">Salud y Caja (CCSS)</label>
+        <input type="number" id="salud" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="salud">
+          Preocupación por listas de espera, financiamiento, eficiencia y sostenibilidad del sistema
+          de salud y pensiones de la CCSS.
+        </small>
+
+        <label for="igualdad" style="margin-top:0.75rem;">Igualdad y trato justo</label>
+        <input type="number" id="igualdad" min="0" step="0.1" value="0">
+        <small class="factor-desc" data-factor="igualdad">
+          Demandas por equidad social, combate a la discriminación y mejor acceso a oportunidades
+          para grupos históricamente excluidos.
+        </small>
+      </div>
+    </div>
+
+    <div class="axis-summary" id="sumInfo"></div>
+    <div class="alert" id="alert"></div>
+
+    <button type="submit" class="btn">Calcular alineamiento</button>
+    <button type="button" class="btn btn-secondary" id="resetBtn">Reiniciar valores</button>
+  </form>
+
+  <div class="results" id="results" style="display:none;">
+    <h2>2. Resultados de alineamiento</h2>
+    <p id="bestMatchText" style="font-size:0.95rem;"></p>
+    <p id="bestMatchProfile" style="font-size:0.85rem;color:#444;"></p>
+
+    <div class="method-note">
+      Este alineamiento se calcula únicamente con base en el volumen relativo de texto
+      que cada plan dedica a los distintos ejes temáticos. No evalúa la calidad,
+      profundidad ni el impacto potencial de las propuestas, ni implica prioridad
+      presupuestaria o probabilidad real de ejecución.
+    </div>
+
+    <h3>Detalle por candidatura</h3>
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Candidatura</th>
+          <th>Diferencia total (suma absoluta)</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <h3 style="margin-top:1.75rem;">Comparación gráfica de tu perfil vs el plan mejor alineado</h3>
+    <p style="font-size:0.8rem;color:#555;">
+      Barras en porcentaje de peso relativo por eje temático (tú vs plan mejor alineado).
+    </p>
+    <canvas id="comparisonChart" width="400" height="220"></canvas>
+
+    <p class="axis-summary" id="axisBreakdown"></p>
+
+    <div class="axis-def-toggle">
+      <label>
+        <input type="checkbox" id="toggleDefinitions">
+        Mostrar definiciones de los ejes temáticos
+      </label>
+    </div>
+
+    <div class="axis-definitions" id="axisDefinitions" style="display:none;">
+      <h4>Desarrollo Económico Integral</h4>
+      <p>
+        Iniciativas que impulsan la modernización productiva y comercial mediante
+        tecnología digital, innovación, movilidad, alianzas estratégicas y formación
+        de capital humano, fortaleciendo competitividad, infraestructura y atracción
+        de inversión en un entorno empresarial dinámico.
+      </p>
+
+      <h4>Desarrollo Social Inclusivo</h4>
+      <p>
+        Iniciativas que promueven acceso equitativo y mejora continua de educación,
+        salud, cultura y bienestar, reduciendo brechas sociales y garantizando
+        oportunidades para todos los sectores de la población.
+      </p>
+
+      <h4>Gestión de Recursos Naturales</h4>
+      <p>
+        Iniciativas para el manejo sostenible, responsable y tecnológicamente
+        avanzado de recursos naturales, energéticos e hídricos, integrando
+        producción con conservación ambiental, adaptación climática y bienestar
+        comunitario.
+      </p>
+
+      <h4>Reforma Institucional y Eficiencia Financiera</h4>
+      <p>
+        Iniciativas que transforman y optimizan la gestión pública mediante reformas
+        administrativas, legales y tecnológicas, fortaleciendo rendición de cuentas,
+        equidad y eficiencia fiscal, y acceso justo a servicios esenciales.
+      </p>
+
+      <h4>Seguridad y Justicia Integral</h4>
+      <p>
+        Iniciativas que articulan acciones estatales para fortalecer seguridad
+        pública, prevención y persecución del delito, integridad institucional y
+        protección ciudadana mediante sistemas policiales, judiciales y de
+        inteligencia.
+      </p>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Nota: Los factores de decisión de voto utilizados se basan en los detectados por la Encuesta de Opinión Pública
+    ECP y CIEP-UCR del 03 de diciembre de 2025, empleados aquí únicamente para facilitar la identificación de
+    preocupaciones personales de voto.
+  </div>
+</div>
+
+<script>
+  // Distribución temática de cada candidatura por eje (%)
+  // Orden de ejes:
+  // 1) Reforma Institucional y Eficiencia Financiera
+  // 2) Seguridad y Justicia Integral
+  // 3) Gestión de Recursos Naturales
+  // 4) Desarrollo Social Inclusivo
+  // 5) Desarrollo Económico Integral
+  const candidateAxes = {
+    "Álvaro Ramos":          [3.8, 13.9, 19.2, 33.5, 29.5],
+    "Ariel Robles":          [7.5, 20.4, 13.6, 42.6, 15.9],
+    "Claudia Dobles":        [6.9, 10.2, 24.2, 34.3, 24.4],
+    "Eli Feinzaig":          [14.2, 13.1, 16.8, 21.7, 34.2],
+    "Fabricio Alvarado":     [4.5, 34.1, 12.0, 28.6, 20.8],
+    "José Aguilar Berrocal": [5.6, 23.2, 10.4, 27.0, 33.9],
+    "Juan Carlos Hidalgo":   [7.9, 14.3, 16.1, 29.2, 32.5],
+    "Laura Fernández":       [56.6, 8.1, 7.0, 16.2, 12.2],
+    "Luz Mary Alpízar":      [8.3, 12.7, 13.5, 43.4, 22.1],
+    "Natalia Díaz":          [8.9, 15.4, 16.0, 29.6, 30.0]
+  };
+
+  // Descripciones de perfil (editables)
+  const candidateProfiles = {
+    "Álvaro Ramos": "Perfil orientado a desarrollo económico y social con peso relevante en gestión de recursos naturales.",
+    "Ariel Robles": "Perfil con fuerte énfasis en desarrollo social inclusivo y justicia integral.",
+    "Claudia Dobles": "Perfil relativamente equilibrado entre desarrollo social, económico y gestión de recursos naturales.",
+    "Eli Feinzaig": "Perfil centrado en desarrollo económico integral con enfoque de mercado.",
+    "Fabricio Alvarado": "Perfil con fuerte prioridad en seguridad y justicia integral.",
+    "José Aguilar Berrocal": "Perfil que combina énfasis en seguridad, economía y desarrollo social.",
+    "Juan Carlos Hidalgo": "Perfil liberal con alto peso en economía y desarrollo social.",
+    "Laura Fernández": "Perfil fuertemente concentrado en reforma institucional y eficiencia del Estado.",
+    "Luz Mary Alpízar": "Perfil con énfasis marcado en desarrollo social inclusivo.",
+    "Natalia Díaz": "Perfil mixto con peso relevante en economía, recursos naturales y desarrollo social."
+  };
+
+  const axisNames = [
+    "Reforma Institucional y Eficiencia Financiera",
+    "Seguridad y Justicia Integral",
+    "Gestión de Recursos Naturales",
+    "Desarrollo Social Inclusivo",
+    "Desarrollo Económico Integral"
+  ];
+
+  const form = document.getElementById("weightsForm");
+  const resetBtn = document.getElementById("resetBtn");
+  const sumInfo = document.getElementById("sumInfo");
+  const alertBox = document.getElementById("alert");
+  const resultsDiv = document.getElementById("results");
+  const bestMatchText = document.getElementById("bestMatchText");
+  const bestMatchProfile = document.getElementById("bestMatchProfile");
+  const resultsTableBody = document.querySelector("#resultsTable tbody");
+  const axisBreakdown = document.getElementById("axisBreakdown");
+  const chartCanvas = document.getElementById("comparisonChart");
+  const toggleDefinitions = document.getElementById("toggleDefinitions");
+  const axisDefinitions = document.getElementById("axisDefinitions");
+  const toggleFactorDesc = document.getElementById("toggleFactorDesc");
+
+  let comparisonChart = null;
+
+  function getFactorWeights() {
+    const ids = [
+      "corrupcion","estabilidad",
+      "seguridad","ambiente",
+      "servicios","costo","transporte","empleo",
+      "igualdad","salud","educacion"
+    ];
+    const values = {};
+    let sum = 0;
+    ids.forEach(id => {
+      const v = parseFloat(document.getElementById(id).value || "0");
+      values[id] = isNaN(v) ? 0 : v;
+      sum += values[id];
+    });
+    return { values, sum, ids };
+  }
+
+  function computeAxisWeights(factors) {
+    // Mapeo de factores -> ejes
+    const reforma   = factors.corrupcion + factors.estabilidad;
+    const seguridad = factors.seguridad;
+    const recursos  = factors.ambiente;
+    const economico = factors.servicios + factors.costo + factors.transporte + factors.empleo;
+    const social    = factors.educacion + factors.salud + factors.igualdad;
+
+    const raw = [reforma, seguridad, recursos, social, economico];
+    const total = raw.reduce((a,b)=>a+b,0);
+
+    // Normalizamos a 100 para comparabilidad
+    const normalized = total > 0 ? raw.map(v => v * 100 / total) : raw.map(()=>0);
+
+    return { raw, normalized, total };
+  }
+
+  function formatNumber(x, decimals=1) {
+    return x.toFixed(decimals).replace(".", ",");
+  }
+
+  function updateSumInfo() {
+    const { values, sum } = getFactorWeights();
+    const { normalized } = computeAxisWeights(values);
+    if (sum === 0) {
+      sumInfo.textContent =
+        "Aún no has ingresado pesos. Cuando lo hagas, se mostrará cómo se distribuyen entre los ejes temáticos.";
+      alertBox.textContent = "";
+      return;
+    }
+    sumInfo.textContent =
+      `Suma total ingresada en factores: ${formatNumber(sum,1)}. ` +
+      `Distribución por ejes (normalizada a 100): ` +
+      `${axisNames[0]} ${formatNumber(normalized[0])}%, ` +
+      `${axisNames[1]} ${formatNumber(normalized[1])}%, ` +
+      `${axisNames[2]} ${formatNumber(normalized[2])}%, ` +
+      `${axisNames[3]} ${formatNumber(normalized[3])}%, ` +
+      `${axisNames[4]} ${formatNumber(normalized[4])}%.`;
+    alertBox.textContent = "";
+  }
+
+  form.addEventListener("input", updateSumInfo);
+  updateSumInfo();
+
+  form.addEventListener("submit", function(e) {
+    e.preventDefault();
+    const { values, sum } = getFactorWeights();
+    const { normalized, total } = computeAxisWeights(values);
+
+    // Validación: suma de factores debe ser ~100
+    const tolerance = 0.5; // para redondeos
+    if (sum === 0) {
+      alertBox.textContent = "Por favor ingresa al menos algún peso distinto de cero en los factores.";
+      resultsDiv.style.display = "none";
+      return;
+    }
+    if (Math.abs(sum - 100) > tolerance) {
+      alertBox.textContent =
+        `La suma de los pesos debe ser 100. Actualmente suma ${formatNumber(sum,1)}. ` +
+        `Ajusta los valores antes de continuar.`;
+      resultsDiv.style.display = "none";
+      return;
+    }
+
+    // Calcular suma de diferencias absolutas por candidatura
+    const results = [];
+    for (const [name, axes] of Object.entries(candidateAxes)) {
+      let absSum = 0;
+      for (let i = 0; i < axes.length; i++) {
+        const diff = Math.abs(normalized[i] - axes[i]);
+        absSum += diff;
+      }
+      results.push({ name, absSum, axes });
+    }
+
+    // Ordenar por mejor alineamiento (menor diferencia)
+    results.sort((a,b) => a.absSum - b.absSum);
+
+    // Mostrar mejor match
+    const best = results[0];
+    bestMatchText.innerHTML =
+      `<span class="badge">Mejor alineamiento</span> ` +
+      `El plan de gobierno que más se aproxima a tu distribución de prioridades es el de <strong>${best.name}</strong> ` +
+      `con una diferencia total de <strong>${formatNumber(best.absSum,1)} puntos porcentuales</strong>.`;
+
+    bestMatchProfile.textContent =
+      candidateProfiles[best.name] ||
+      "Descripción pendiente de completar para esta candidatura.";
+
+    // Llenar tabla
+    resultsTableBody.innerHTML = "";
+    results.forEach((r, idx) => {
+      const tr = document.createElement("tr");
+      if (idx === 0) tr.classList.add("highlight");
+      tr.innerHTML = `
+        <td>${r.name}</td>
+        <td>${formatNumber(r.absSum,1)} pp</td>
+      `;
+      resultsTableBody.appendChild(tr);
+    });
+
+    axisBreakdown.textContent =
+      `Tus ejes normalizados para el cálculo fueron: ` +
+      `${axisNames[0]} ${formatNumber(normalized[0])}%, ` +
+      `${axisNames[1]} ${formatNumber(normalized[1])}%, ` +
+      `${axisNames[2]} ${formatNumber(normalized[2])}%, ` +
+      `${axisNames[3]} ${formatNumber(normalized[3])}%, ` +
+      `${axisNames[4]} ${formatNumber(normalized[4])}%.`;
+
+    // Actualizar / crear gráfico
+    const userData = normalized;
+    const planData = best.axes;
+
+    if (comparisonChart) {
+      comparisonChart.destroy();
+    }
+
+    comparisonChart = new Chart(chartCanvas, {
+      type: 'bar',
+      data: {
+        labels: axisNames,
+        datasets: [
+          {
+            label: 'Tus prioridades',
+            data: userData,
+            backgroundColor: 'rgba(26, 60, 255, 0.6)'
+          },
+          {
+            label: `Plan de ${best.name}`,
+            data: planData,
+            backgroundColor: 'rgba(120, 120, 120, 0.6)'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              callback: function(value) { return value + '%'; }
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            position: 'bottom'
+          },
+          tooltip: {
+            callbacks: {
+              label: function(context) {
+                return `${context.dataset.label}: ${context.parsed.y.toFixed(1)}%`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    resultsDiv.style.display = "block";
+    alertBox.textContent = "";
+  });
+
+  resetBtn.addEventListener("click", () => {
+    const { ids } = getFactorWeights();
+    ids.forEach(id => {
+      document.getElementById(id).value = 0;
+    });
+    if (comparisonChart) {
+      comparisonChart.destroy();
+      comparisonChart = null;
+    }
+    resultsDiv.style.display = "none";
+    alertBox.textContent = "";
+    toggleDefinitions.checked = false;
+    axisDefinitions.style.display = "none";
+    toggleFactorDesc.checked = false;
+    document.querySelectorAll('.factor-desc').forEach(el => el.style.display = 'none');
+    updateSumInfo();
+  });
+
+  toggleDefinitions.addEventListener("change", () => {
+    axisDefinitions.style.display = toggleDefinitions.checked ? "block" : "none";
+  });
+
+  toggleFactorDesc.addEventListener("change", () => {
+    const show = toggleFactorDesc.checked;
+    document.querySelectorAll('.factor-desc').forEach(el => {
+      el.style.display = show ? 'block' : 'none';
+    });
+  });
+</script>
+</body>
+</html>
