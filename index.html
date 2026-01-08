@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
@@ -14,6 +14,7 @@
       color: #111;
     }
     h1, h2, h3 { margin-top: 0; }
+
     .container {
       max-width: 1100px;
       margin: 0 auto;
@@ -22,6 +23,17 @@
       border-radius: 16px;
       box-shadow: 0 8px 20px rgba(0,0,0,0.05);
     }
+
+    /* Intro alineada a la izquierda */
+    .intro {
+      font-size: 0.95rem;
+      line-height: 1.55;
+      text-align: left;
+      max-width: none;
+      margin: 0 0 1rem 0;
+    }
+    .intro strong { font-weight: 700; }
+
     .grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
@@ -126,39 +138,98 @@
     }
   </style>
 </head>
+
 <body>
 <div class="container">
   <h1>Simulador de alineamiento entre tu priorización temática y los planes de gobierno</h1>
-  <p style="font-size:0.9rem;max-width:760px;">
-    Este simulador se basa en un análisis automatizado del texto de los planes de gobierno de las diez candidaturas
-    que lideran la Encuesta de Opinión Pública ECP–CIEP-UCR del 3 de diciembre de 2025. A partir de ese corpus se
-    identificaron cinco ejes temáticos transversales que agrupan la mayor parte de las propuestas: 
-    <strong>Desarrollo Económico Integral</strong>, <strong>Desarrollo Social Inclusivo</strong>, 
-    <strong>Gestión de Recursos Naturales</strong>, <strong>Reforma Institucional y Eficiencia Financiera</strong> y 
-    <strong>Seguridad y Justicia Integral</strong>.
+
+  <p class="intro">
+    Este simulador se basa en un análisis automatizado del texto de los planes de gobierno de las diez candidaturas que lideran la Encuesta de Opinión Pública ECP–CIEP-UCR del 3 de diciembre de 2025. A partir de ese corpus se identificaron cinco ejes temáticos transversales que agrupan la mayor parte de las propuestas programáticas: <strong>Desarrollo Económico Integral</strong>, <strong>Desarrollo Social Inclusivo</strong>, <strong>Gestión de Recursos Naturales</strong>, <strong>Reforma Institucional y Eficiencia Financiera</strong> y <strong>Seguridad y Justicia Integral</strong>. Estos ejes representan grandes áreas de política pública sobre las cuales las candidaturas estructuran sus planes y comunican sus prioridades.
   </p>
-  <p style="font-size:0.9rem;max-width:760px;">
-    El propósito de este ejercicio es que asignés un peso (0–100) a cada uno de estos ejes según la importancia que
-    tiene en tu decisión de voto. Luego se compara tu distribución con el volumen relativo de texto que cada plan de
-    gobierno dedica a esos mismos ejes, calculando la suma de diferencias absolutas en puntos porcentuales para
-    mostrar con cuál candidatura te aproximás más en términos de énfasis temático.
+
+  <p class="intro">
+    El propósito de este ejercicio es invitarte a reflexionar y priorizar, asignando un peso entre 0 y 100 a cada uno de estos ejes según la importancia que tienen en tu propia decisión de voto. Esa priorización es necesariamente personal y depende de la visión política, económica y social de cada persona, así como de cómo interpreta el contexto actual de Costa Rica y qué considera más urgente, estratégico o estructural para el país. Una vez definida tu distribución, esta se compara con el volumen relativo de texto que cada plan de gobierno dedica a esos mismos ejes, calculando la suma de diferencias absolutas en puntos porcentuales para mostrar con cuál candidatura existe una mayor aproximación en términos de énfasis temático.
   </p>
-  <p style="font-size:0.9rem;max-width:760px;">
-    Este ejercicio es direccional y práctico, no exhaustivo ni definitivo: aproxima la importancia que cada
-    candidatura parece otorgar a los temas por el espacio que les dedica en su plan, pero no evalúa la calidad,
-    viabilidad o impacto de las propuestas. Tu decisión final debería considerar también el desempeño de las
-    candidaturas en debates y entrevistas, sus cualidades de liderazgo y equipos cercanos, la evolución del contexto
-    electoral y las conversaciones informadas con personas de confianza.
+
+  <p class="intro">
+    Para ilustrar cómo puede razonarse esta priorización —sin que constituya una referencia normativa—, comparto a continuación un ejemplo personal.
+  </p>
+
+  <!-- ✅ Ejemplo personal: ahora en párrafos separados por eje (sin sintetizar ni recortar) -->
+  <p class="intro">
+    En mi caso, asigné el mayor peso al Desarrollo Social Inclusivo (35%), al considerar que una sociedad educada, sana, con acceso equitativo a oportunidades y con cohesión social constituye la base sobre la cual se sostiene el desarrollo de largo plazo. El fortalecimiento del capital humano no solo reduce desigualdades estructurales, sino que impulsa la productividad, la movilidad social y la estabilidad democrática, creando condiciones más sólidas para el crecimiento sostenible.
+  </p>
+
+  <p class="intro">
+    En segundo lugar prioricé el Desarrollo Económico Integral (26%), entendiendo que dinamizar la economía, atraer inversión, fomentar la innovación, desarrollar capacidades digitales y aumentar la productividad es indispensable para generar más y mejores empleos, ingresos sostenibles para las personas, las empresas y el Estado, y una estabilidad macroeconómica que respalde la ejecución de políticas públicas efectivas en áreas como educación, salud, seguridad e infraestructura.
+  </p>
+
+  <p class="intro">
+    En tercer lugar asigné un peso relevante a la Gestión de Recursos Naturales (20%), considerando que para Costa Rica la sostenibilidad ambiental, hídrica y energética es estratégica: sostiene sectores productivos clave como el turismo y la agricultura, protege el bienestar comunitario, reduce riesgos futuros en salud y seguridad alimentaria, y fortalece el posicionamiento internacional del país.
+  </p>
+
+  <p class="intro">
+    Posteriormente otorgué un peso moderado a Seguridad y Justicia Integral (11%), reconociendo la gravedad de la coyuntura actual, pero partiendo de la convicción de que sus soluciones estructurales dependen en gran medida de avances en educación, oportunidades económicas y cohesión social, más allá de respuestas de corto plazo que suelen ser similares entre planes.
+  </p>
+
+  <p class="intro">
+    Finalmente asigné un menor peso a Reforma Institucional y Eficiencia Financiera (8%), no por falta de relevancia, sino considerando avances recientes como la reforma fiscal, la ley de empleo público y procesos de digitalización del Estado, y entendiendo que los desafíos pendientes en esta materia están estrechamente vinculados al crecimiento económico y la estabilidad macroeconómica.
+  </p>
+
+  <p class="intro">
+    Este ejemplo no pretende ser replicado ni asumido como correcto: su objetivo es mostrar una forma posible de razonar, justificar prioridades y asignar pesos de manera coherente y contextualizada.
+  </p>
+
+  <p class="intro">
+    En ese sentido, este ejercicio es direccional y práctico, no exhaustivo ni definitivo: aproxima la importancia que cada candidatura parece otorgar a los distintos temas a partir del espacio que les dedica en su plan, pero no evalúa la calidad, viabilidad o impacto potencial de las propuestas. El resultado busca servir como punto de partida para orientar el análisis, motivar una revisión más profunda de los planes de gobierno más cercanos a tus prioridades y complementar otros criterios fundamentales como el desempeño de las candidaturas en debates y entrevistas, sus cualidades de liderazgo y equipos cercanos, la evolución del contexto electoral y el diálogo informado con personas de confianza.
   </p>
 
   <h2>1. Asigna un peso a cada eje temático</h2>
-  <p style="font-size:0.85rem;">
+  <p style="font-size:0.85rem; margin-top:0;">
     Los pesos deben sumar <strong>100</strong> entre todos los ejes. Usa los textos descriptivos para guiarte sobre
     qué abarca cada uno.
   </p>
 
   <form id="weightsForm">
     <div class="grid">
+      <!-- ORDEN ALFABÉTICO por primera palabra: Desarrollo..., Desarrollo..., Gestión..., Reforma..., Seguridad... -->
+
+      <!-- Desarrollo Económico Integral -->
+      <div class="card">
+        <label for="economico">Desarrollo Económico Integral</label>
+        <input type="number" id="economico" min="0" max="100" step="1" value="0">
+        <div class="axis-desc">
+          Iniciativas que impulsan la modernización productiva y comercial mediante la integración de tecnología
+          digital, innovación, movilidad, alianzas estratégicas y formación de capital humano, orientadas a fortalecer
+          la competitividad nacional, la infraestructura de transporte y turismo, la ciberseguridad y la atracción de
+          inversión extranjera en un entorno empresarial dinámico y regionalmente articulado.
+        </div>
+      </div>
+
+      <!-- Desarrollo Social Inclusivo -->
+      <div class="card">
+        <label for="social">Desarrollo Social Inclusivo</label>
+        <input type="number" id="social" min="0" max="100" step="1" value="0">
+        <div class="axis-desc">
+          Iniciativas que promueven el acceso equitativo y la mejora continua de la educación, salud, cultura y
+          bienestar, priorizando la inclusión de grupos diversos y vulnerables mediante acciones transversales
+          orientadas a reducir brechas sociales, fortalecer capacidades y garantizar oportunidades para todos los
+          sectores de la población costarricense.
+        </div>
+      </div>
+
+      <!-- Gestión de Recursos Naturales -->
+      <div class="card">
+        <label for="recursos">Gestión de Recursos Naturales</label>
+        <input type="number" id="recursos" min="0" max="100" step="1" value="0">
+        <div class="axis-desc">
+          Iniciativas que promueven el manejo sostenible, responsable y tecnológicamente avanzado de los recursos
+          naturales, energéticos e hídricos, integrando la producción agrícola, pesquera y urbana con la conservación
+          ambiental, la adaptación climática y la gobernanza participativa para asegurar el bienestar comunitario y la
+          biodiversidad en Costa Rica.
+        </div>
+      </div>
+
       <!-- Reforma Institucional y Eficiencia Financiera -->
       <div class="card">
         <label for="reforma">Reforma Institucional y Eficiencia Financiera</label>
@@ -180,42 +251,6 @@
           persecución del delito, la integridad institucional y la protección ciudadana mediante sistemas policiales,
           judiciales y de inteligencia, promoviendo la paz social y la dignidad en respuesta a fenómenos criminales,
           violencia, corrupción, narcotráfico y desafíos asociados a la inseguridad en Costa Rica.
-        </div>
-      </div>
-
-      <!-- Gestión de Recursos Naturales -->
-      <div class="card">
-        <label for="recursos">Gestión de Recursos Naturales</label>
-        <input type="number" id="recursos" min="0" max="100" step="1" value="0">
-        <div class="axis-desc">
-          Iniciativas que promueven el manejo sostenible, responsable y tecnológicamente avanzado de los recursos
-          naturales, energéticos e hídricos, integrando la producción agrícola, pesquera y urbana con la conservación
-          ambiental, la adaptación climática y la gobernanza participativa para asegurar el bienestar comunitario y la
-          biodiversidad en Costa Rica.
-        </div>
-      </div>
-
-      <!-- Desarrollo Social Inclusivo -->
-      <div class="card">
-        <label for="social">Desarrollo Social Inclusivo</label>
-        <input type="number" id="social" min="0" max="100" step="1" value="0">
-        <div class="axis-desc">
-          Iniciativas que promueven el acceso equitativo y la mejora continua de la educación, salud, cultura y
-          bienestar, priorizando la inclusión de grupos diversos y vulnerables mediante acciones transversales
-          orientadas a reducir brechas sociales, fortalecer capacidades y garantizar oportunidades para todos los
-          sectores de la población costarricense.
-        </div>
-      </div>
-
-      <!-- Desarrollo Económico Integral -->
-      <div class="card">
-        <label for="economico">Desarrollo Económico Integral</label>
-        <input type="number" id="economico" min="0" max="100" step="1" value="0">
-        <div class="axis-desc">
-          Iniciativas que impulsan la modernización productiva y comercial mediante la integración de tecnología
-          digital, innovación, movilidad, alianzas estratégicas y formación de capital humano, orientadas a fortalecer
-          la competitividad nacional, la infraestructura de transporte y turismo, la ciberseguridad y la atracción de
-          inversión extranjera en un entorno empresarial dinámico y regionalmente articulado.
         </div>
       </div>
     </div>
@@ -259,7 +294,6 @@
 
     <div style="margin-top:2rem;border-top:1px solid #e1e1e1;padding-top:1.2rem;">
       <h3>Antes de tomar tu decisión de voto, te recomiendo también:</h3>
-
       <ol style="font-size:0.9rem;line-height:1.5;color:#333;">
         <li>
           Conocer más sobre la viabilidad política, fiscal y de ejecución de las propuestas,
@@ -296,32 +330,32 @@
 </div>
 
 <script>
-  // Orden de ejes en los datos:
-  // 1) Reforma Institucional y Eficiencia Financiera
-  // 2) Seguridad y Justicia Integral
+  // Orden de ejes en los datos (coincide con el orden alfabético mostrado):
+  // 1) Desarrollo Económico Integral
+  // 2) Desarrollo Social Inclusivo
   // 3) Gestión de Recursos Naturales
-  // 4) Desarrollo Social Inclusivo
-  // 5) Desarrollo Económico Integral
+  // 4) Reforma Institucional y Eficiencia Financiera
+  // 5) Seguridad y Justicia Integral
   const axisNames = [
-    "Reforma Institucional y Eficiencia Financiera",
-    "Seguridad y Justicia Integral",
-    "Gestión de Recursos Naturales",
+    "Desarrollo Económico Integral",
     "Desarrollo Social Inclusivo",
-    "Desarrollo Económico Integral"
+    "Gestión de Recursos Naturales",
+    "Reforma Institucional y Eficiencia Financiera",
+    "Seguridad y Justicia Integral"
   ];
 
-  // Distribución temática de cada candidatura por eje (%), en el mismo orden
+  // Distribución temática de cada candidatura por eje (%), en el mismo orden que axisNames
   const candidateAxes = {
-    "Álvaro Ramos":          [3.8, 13.9, 19.2, 33.5, 29.5],
-    "Ariel Robles":          [7.5, 20.4, 13.6, 42.6, 15.9],
-    "Claudia Dobles":        [6.9, 10.2, 24.2, 34.3, 24.4],
-    "Eli Feinzaig":          [14.2, 13.1, 16.8, 21.7, 34.2],
-    "Fabricio Alvarado":     [4.5, 34.1, 12.0, 28.6, 20.8],
-    "José Aguilar Berrocal": [5.6, 23.2, 10.4, 27.0, 33.9],
-    "Juan Carlos Hidalgo":   [7.9, 14.3, 16.1, 29.2, 32.5],
-    "Laura Fernández":       [56.6, 8.1, 7.0, 16.2, 12.2],
-    "Luz Mary Alpízar":      [8.3, 12.7, 13.5, 43.4, 22.1],
-    "Natalia Díaz":          [8.9, 15.4, 16.0, 29.6, 30.0]
+    "Álvaro Ramos":          [29.5, 33.5, 19.2, 3.8, 13.9],
+    "Ariel Robles":          [15.9, 42.6, 13.6, 7.5, 20.4],
+    "Claudia Dobles":        [24.4, 34.3, 24.2, 6.9, 10.2],
+    "Eli Feinzaig":          [34.2, 21.7, 16.8, 14.2, 13.1],
+    "Fabricio Alvarado":     [20.8, 28.6, 12.0, 4.5, 34.1],
+    "José Aguilar Berrocal": [33.9, 27.0, 10.4, 5.6, 23.2],
+    "Juan Carlos Hidalgo":   [32.5, 29.2, 16.1, 7.9, 14.3],
+    "Laura Fernández":       [12.2, 16.2, 7.0, 56.6, 8.1],
+    "Luz Mary Alpízar":      [22.1, 43.4, 13.5, 8.3, 12.7],
+    "Natalia Díaz":          [30.0, 29.6, 16.0, 8.9, 15.4]
   };
 
   const candidateProfiles = {
@@ -354,15 +388,18 @@
   }
 
   function getAxisWeights() {
-    const ids = ["reforma","seguridad","recursos","social","economico"];
+    // Debe seguir el mismo orden de axisNames
+    const ids = ["economico","social","recursos","reforma","seguridad"];
     const values = [];
     let sum = 0;
+
     ids.forEach(id => {
       const v = parseFloat(document.getElementById(id).value || "0");
       const val = isNaN(v) ? 0 : v;
       values.push(val);
       sum += val;
     });
+
     return { values, sum };
   }
 
@@ -401,10 +438,8 @@
       return;
     }
 
-    // Normalizamos (por si hay 99/101 por redondeo)
     const normalized = values.map(v => v * 100 / sum);
 
-    // Calcular suma de diferencias absolutas por candidatura
     const results = [];
     for (const [name, axes] of Object.entries(candidateAxes)) {
       let absSum = 0;
@@ -437,7 +472,6 @@
       `Tus pesos normalizados para el cálculo fueron: ` +
       axisNames.map((n,i) => `${n} ${formatNumber(normalized[i])}%`).join(", ") + ".";
 
-    // Gráfico
     if (comparisonChart) comparisonChart.destroy();
     comparisonChart = new Chart(chartCanvas, {
       type: 'bar',
@@ -481,7 +515,7 @@
   });
 
   resetBtn.addEventListener("click", () => {
-    ["reforma","seguridad","recursos","social","economico"].forEach(id => {
+    ["economico","social","recursos","reforma","seguridad"].forEach(id => {
       document.getElementById(id).value = 0;
     });
     if (comparisonChart) {
@@ -495,4 +529,3 @@
 </script>
 </body>
 </html>
-
